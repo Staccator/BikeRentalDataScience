@@ -1,0 +1,53 @@
+---
+title: "Projekt nr 3"
+author: "Rafał Chabasiński, Elżbieta Grabowska"
+date: "30/05/2020"
+output:
+  html_document: default
+---
+
+### Wszystkie poniższe statystyki pochodzą z roku 2018 z Jersey City
+## Ładowanie bibliotek i danych
+```{r message = FALSE, warning = FALSE}
+library('ggplot2')
+library('dplyr')
+library('ggfortify')
+library('ggthemes')
+library('ggmap')
+file_names <- c("monthly_trip_times.csv", "stations.csv", "week_hours.csv")
+results <- list()
+for(i in seq_along(file_names)){
+  file_name <- paste0("results/", file_names[i])
+  results[[i]] <- read.csv(file_name)
+}
+
+ggmap::register_google(key = "AIzaSyCk3ZnecDDBb838jT1OmnJl_7Tck3R8JiE")
+```
+
+## Miesięczny sumaryczny czas wypożyczeń użytkowników (w godzinach)
+```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, out.width = "100%"}
+res1 <- results[[1]]
+g <- ggplot(data = res1, aes(x=as.factor(month), y=TripTimeTotal, fill=as.factor(Gender)))
+g + geom_bar(stat = "identity") + scale_fill_brewer(palette = "Dark2", name = "Gender") +
+  xlab("Month") + ylab("Total Trip Duration (hours)") + theme(legend.position = 'bottom')
+
+```
+
+## Mapa najczęściej wybieranych stacji docelowych
+```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, fig.align='center'}
+res2 <- results[[2]]
+
+p <- ggmap(get_googlemap(center = c(lon = -74.03, lat = 40.75), zoom = 12, scale = 2, maptype ='terrain', color = 'color'))
+
+p + geom_point(aes(end.station.longitude, end.station.latitude, size = NumOfTrips, colour = NumOfTrips), data = res2) +
+  scale_color_gradient(low="blue", high="red")
+```
+
+## Średnia godzinowa ilośc wypożyczeń na przestrzeni tygodnia
+```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, out.width = "120%"}
+res3 <- results[[3]]
+res3$Id <- seq.int(nrow(res3))
+#autoplot(res3$Count) + labs(title = "Rentals Per Hour")
+ggplot(res3, aes(y=Count, x=Id)) + geom_line(lwd=1) +
+  labs(x="Hour", y="Rental Count")
+```

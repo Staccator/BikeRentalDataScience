@@ -13,11 +13,6 @@ res1 <- data %>%
   mutate(Gender = ifelse(gender==1,"Male","Female"))
 write_to_csv(res1, "monthly_trip_times")
 
-g <- ggplot(data = res1, aes(x=as.factor(month), y=TripTimeTotal, fill=as.factor(Gender)))
-g + geom_bar(stat = "identity") + scale_fill_brewer(palette = "Dark2", name = "Gender") +
-  xlab("Month") + ylab("Total Trip Duration (hours)") + theme(legend.position = 'bottom')
-
-
 res2 <- data %>%
   group_by(end.station.id) %>%
   mutate(NumOfTrips = n()) %>% top_n(1, tripduration) %>% ungroup() %>%
