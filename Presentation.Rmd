@@ -1,0 +1,31 @@
+---
+title: "Podsumowanie danych systemu rowerów miejskich Jersey City w latach 2016-2019"
+author: "Rafal Chabasinski, Elzbieta Grabowska"
+date: "30 05 2020"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE, cache=TRUE}
+source("Part2/GenderStatistics.R")
+source("Part2/LoadData.R")
+LoadData()
+GenderStatistics()
+
+```
+
+## Analiza danych 
+
+Udział procentowy poszczególnych płci w podsumowaniu rocznym
+```{r, echo=FALSE, cache=TRUE, fig.height = 6, fig.width = 6, fig.align = "center"}
+temp<- read.csv("ChartsData/GenderYearly.csv", row.names = 1)
+percent<-  (temp[1,]/sum(temp[1,]))*100
+label<- sprintf("%s %.2f%%",colnames(temp),percent)
+pie(as.vector(t(temp[1,])), labels = label ,col=rainbow(length(percent)),main = "2016" )
+
+```
+
+
+## Bibliografia
+* Dane pochodzą ze [strony](https://www.citibikenyc.com/system-data) spółki Citi Bike i dotyczą Jersey City
