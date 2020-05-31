@@ -8,24 +8,71 @@ output:
 ---
 
 ```{r setup, include=FALSE, cache=TRUE}
-source("Part2/GenderStatistics.R")
 source("Part2/LoadData.R")
+source("Part2/GenderStatistics.R")
+source("Part2/CountStatistics.R")
+library(gridExtra)
+library(ggplot2)
 LoadData()
 GenderStatistics()
-
+CountStatistics()
 ```
 
-## Analiza danych 
 
-Udział procentowy poszczególnych płci w podsumowaniu rocznym
-```{r, echo=FALSE, cache=TRUE, fig.height = 6, fig.width = 6, fig.align = "center"}
+## Udział procentowy płci
+```{r, echo=FALSE, cache=TRUE, fig.height = 5.9, fig.width = 8, fig.align = "center"}
 temp<- read.csv("ChartsData/GenderYearly.csv", row.names = 1)
-percent<-  (temp[1,]/sum(temp[1,]))*100
-label<- sprintf("%s %.2f%%",colnames(temp),percent)
-pie(as.vector(t(temp[1,])), labels = label ,col=rainbow(length(percent)),main = "2016" )
 
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+for (ind in 1:4) {
+  dt <- data.frame(Gender = colnames(temp), "values" = as.vector(t(temp[ind,])))
+  chart<- ggplot(dt, aes (x="", y = values, fill = factor(Gender))) + 
+  geom_bar(width = 5, stat = "identity") + labs(title = rownames(temp)[ind])+
+  geom_text(aes(label = paste0(round(values / sum(values) * 100, 2), "%")), 
+            position = position_stack(vjust = 0.5)) + 
+  coord_polar("y")+theme_void()+theme(legend.position="none")
+  assign(paste0("chart",ind),chart)
+}
+
+commonLegend<- g_legend(chart2+labs(fill = "Gender", x = NULL, y = NULL)+theme(legend.position="right"))
+grid.arrange(arrangeGrob(chart1,chart2,chart3,chart4),commonLegend,ncol=2, widths=c(10,1.5))
 ```
 
+## Liczba przejazdów
+```{r, echo=FALSE, cache=TRUE, fig.height = 5, fig.width = 8, fig.align = "center"}
+temp<- read.csv("ChartsData/CountYearly.csv", row.names = 1)
+dt<- data.frame(Year=rownames(temp),Count=temp[,1]/100000)
+
+chart1<- ggplot(dt, aes(x=Year, y=Count)) +
+  geom_bar(stat="identity",width = 0.5,color="Sky Blue", fill="Sky Blue") +
+  labs(y="Liczba [100 tys]", x="Rok")+ geom_text(aes(label=round(Count,2)), vjust=-0.3, size=4)
+
+chart1
+```
+
+## Zmiany w liczbie przejazdów
+```{r, echo=FALSE, cache=TRUE, fig.height = 5, fig.width = 8, fig.align = "center"}
+temp<- read.csv("ChartsData/CountYearly.csv", row.names = 1)
+dt<- data.frame(Year=rownames(temp))
+dt$GrowthTo2016<- 100*(temp[,1]-temp[1,1])/temp[1,1]
+chart1<- ggplot(dt[2:4,], aes(x=Year, y=GrowthTo2016)) +
+  geom_bar(stat="identity",width = 0.5,color="Sky Blue", fill="Sky Blue") +
+  labs(y="Wzrost względem 2016", x="Rok")+ geom_text(aes(label= paste0(round(GrowthTo2016,2),'%')), vjust=-0.3, size=4)
+dt$GrowthToFormer<- 100*(temp[,1]-c(temp[1,1],temp[1:3,1]))/c(temp[1,1],temp[1:3,1])
+
+chart2<- ggplot(dt[2:4,], aes(x=Year, y=GrowthToFormer)) +
+  geom_bar(stat="identity",width = 0.5,color="Sky Blue", fill="Sky Blue") +
+  labs(y="Wzrost względem poprzedniego", x="Rok")+ geom_text(aes(label= paste0(round(GrowthToFormer,2),'%')), vjust=-0.3, size=4)
+
+grid.arrange(chart1,chart2,ncol=2)
+```
 
 ## Bibliografia
 * Dane pochodzą ze [strony](https://www.citibikenyc.com/system-data) spółki Citi Bike i dotyczą Jersey City
+* [Sposób tworzenia wykresu kołowego w bibliotece ggplot2](https://community.rstudio.com/t/how-to-adjust-labels-on-a-pie-chart-in-ggplot2/38184/3)
+* [Dołączanie wspólnej legendy do układu wykresów](https://stackoverflow.com/questions/13649473/add-a-common-legend-for-combined-ggplots)
