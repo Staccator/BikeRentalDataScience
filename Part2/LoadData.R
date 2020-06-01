@@ -4,7 +4,8 @@ LoadDataYear<- function(y)
   {
     dataFrameName<- paste("dt", substr(fileName, 17,22),sep = "")
     temp<- read.csv(file = fileName)
-    names(temp)<- tolower(names(temp))
+    colnames(temp)<- tolower(colnames(temp))
+    colnames(temp)[1]<- "trip.duration"
     assign(dataFrameName,temp,envir = globalenv() )
   }
   months<- sprintf("Part2/JCdata/JC-%d%02d-citibike-tripdata.csv",y,1:12)
