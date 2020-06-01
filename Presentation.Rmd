@@ -30,7 +30,14 @@ GenderStatistics()
 CountStatistics()
 ```
 
-## Statystyki dla roku 2018
+##
+\ 
+
+\ 
+\ 
+
+\ 
+<font size="20">Statystyki dla roku 2018 </font>
 
 ## Miesięczny sumaryczny czas wypożyczeń użytkowników (w godzinach)
 ```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, fig.height = 4.4, fig.width = 8, fig.align = "center"}
@@ -60,7 +67,15 @@ ggplot(res3, aes(y=Count, x=Id)) + geom_line(lwd=1) +
   labs(x="Hour", y="Rental Count")
 ```
 
-## Statystyki porównawcze w latach 2016-2019
+##
+\ 
+
+\ 
+\ 
+
+\ 
+<font size="20">Statystyki porównawcze w latach 2016-2019 </font>
+
 
 ## Udział procentowy płci
 ```{r, echo=FALSE, cache=TRUE, fig.height = 5.9, fig.width = 8, fig.align = "center"}
