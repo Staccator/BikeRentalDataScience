@@ -54,7 +54,7 @@ p + geom_point(aes(end.station.longitude, end.station.latitude, size = NumOfTrip
   scale_color_gradient(low="blue", high="red")
 ```
 
-## Średnia godzinowa ilośc wypożyczeń na przestrzeni tygodnia
+## Średnia godzinowa ilość wypożyczeń na przestrzeni tygodnia
 ```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, fig.height = 5, fig.width = 8, fig.align = "center"}
 res3 <- results[[3]]
 res3$Id <- seq.int(nrow(res3))
