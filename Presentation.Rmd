@@ -72,6 +72,7 @@ start_stations_map <- p + geom_point(aes(longitude, latitude, size = NumOfTrips,
 end_stations_map <- p + geom_point(aes(longitude, latitude, size = NumOfTrips, colour = NumOfTrips), data = res5) + scale_color_gradient(low="blue", high="red") + theme(legend.position = "none")
 grid.arrange(start_stations_map, end_stations_map,ncol=2)
 ```
+
 ##
 \ 
 
