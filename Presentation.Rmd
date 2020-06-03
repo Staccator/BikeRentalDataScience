@@ -15,7 +15,7 @@ library('dplyr')
 library('ggfortify')
 library('ggthemes')
 library('ggmap')
-file_names <- c("monthly_trip_times.csv", "stations.csv", "week_hours.csv")
+file_names <- c("monthly_trip_times.csv", "stations.csv", "week_hours.csv", "start_stations_early.csv", "end_stations_early.csv")
 results <- list()
 for(i in seq_along(file_names)){
   file_name <- paste0("results/", file_names[i])
@@ -63,6 +63,15 @@ ggplot(res3, aes(y=Count, x=Id)) + geom_line(lwd=1) +
   labs(x="Hour", y="Rental Count")
 ```
 
+## Stacje startowe i końcowe w godzinach podróży do pracy
+```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, fig.align='center'}
+res4 <- results[[4]]
+res5 <- results[[5]]
+
+start_stations_map <- p + geom_point(aes(longitude, latitude, size = NumOfTrips, colour = NumOfTrips), data = res4) + scale_color_gradient(low="blue", high="red") + theme(legend.position = "none")
+end_stations_map <- p + geom_point(aes(longitude, latitude, size = NumOfTrips, colour = NumOfTrips), data = res5) + scale_color_gradient(low="blue", high="red") + theme(legend.position = "none")
+grid.arrange(start_stations_map, end_stations_map,ncol=2)
+```
 ##
 \ 
 

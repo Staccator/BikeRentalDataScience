@@ -14,7 +14,7 @@ library('dplyr')
 library('ggfortify')
 library('ggthemes')
 library('ggmap')
-file_names <- c("monthly_trip_times.csv", "stations.csv", "week_hours.csv")
+file_names <- c("monthly_trip_times.csv", "stations.csv", "week_hours.csv", "start_stations_early.csv", "end_stations_early.csv")
 results <- list()
 for(i in seq_along(file_names)){
   file_name <- paste0("results/", file_names[i])
@@ -36,11 +36,15 @@ g + geom_bar(stat = "identity") + scale_fill_brewer(palette = "Dark2", name = "G
 ## Mapa najczęściej wybieranych stacji docelowych
 ```{r message = FALSE, warning = FALSE, echo = FALSE, cache = TRUE, fig.align='center'}
 res2 <- results[[2]]
+res4 <- results[[4]]
+res5 <- results[[5]]
 
 p <- ggmap(get_googlemap(center = c(lon = -74.03, lat = 40.75), zoom = 12, scale = 2, maptype ='terrain', color = 'color'))
-
 p + geom_point(aes(end.station.longitude, end.station.latitude, size = NumOfTrips, colour = NumOfTrips), data = res2) +
   scale_color_gradient(low="blue", high="red")
+
+p + geom_point(aes(longitude, latitude, size = NumOfTrips, colour = NumOfTrips), data = res4) + scale_color_gradient(low="blue", high="red")
+p + geom_point(aes(longitude, latitude, size = NumOfTrips, colour = NumOfTrips), data = res5) + scale_color_gradient(low="blue", high="red")
 ```
 
 ## Średnia godzinowa ilośc wypożyczeń na przestrzeni tygodnia

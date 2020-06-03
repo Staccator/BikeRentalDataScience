@@ -24,3 +24,20 @@ res3 <- data %>%
   group_by(DayOfWeek, hour) %>%
   summarize(Count = n())
 write_to_csv(res3, "week_hours")
+
+early_hours_week_data <- data %>%
+  filter(DayOfWeek >= 1 & DayOfWeek <= 5 & hour >=7 & hour <= 9)
+
+res4 <- early_hours_week_data %>%
+  group_by(start.station.id) %>%
+  mutate(NumOfTrips = n()) %>% top_n(1, tripduration) %>% ungroup() %>%
+  select(id = start.station.id, start.station.name, latitude = start.station.latitude, longitude = start.station.longitude, NumOfTrips) %>%
+  arrange(id)
+write_to_csv(res4, "start_stations_early")
+
+res5 <- early_hours_week_data %>%
+  group_by(end.station.id) %>%
+  mutate(NumOfTrips = n()) %>% top_n(1, tripduration) %>% ungroup() %>%
+  select(id = end.station.id, end.station.name, latitude = end.station.latitude, longitude = end.station.longitude, NumOfTrips) %>%
+  arrange(id)
+write_to_csv(res5, "end_stations_early")
