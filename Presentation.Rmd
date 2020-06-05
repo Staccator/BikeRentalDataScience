@@ -136,7 +136,7 @@ chart2<- ggplot(dt[2:4,], aes(x=Year, y=GrowthToFormer)) +
 grid.arrange(chart1,chart2,ncol=2)
 ```
 
-## Maksymalna predkosc przejazdów
+## Maksymalna prędkość przejazdów
 ```{r, echo=FALSE,cache=TRUE, fig.height = 5, fig.width = 8, fig.align = "center"}
 for (year in 2017:2018) {
   assign(paste0("data",year),read.csv(sprintf("ChartsData/VelocityMonthly%d.csv",year), row.names = 1))
@@ -155,7 +155,7 @@ grid.arrange(chart2017,chart2018,nrow=2)
 
 ```
 
-## Maksymalna prędkoćś przejazdów
+## Maksymalna prędkość przejazdów
 ```{r, echo=FALSE,cache=TRUE, fig.height = 5, fig.width = 8, fig.align = "center"}
 for (year in 2016:2019) {
   temp<-read.csv(sprintf("ChartsData/VelocityMonthly%d.csv",year), row.names = 1)
