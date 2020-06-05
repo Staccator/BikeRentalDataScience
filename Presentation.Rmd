@@ -155,11 +155,11 @@ grid.arrange(chart2017,chart2018,nrow=2)
 
 ```
 
-## Maksymalna predkosc przejazdów
+## Maksymalna prędkoćś przejazdów
 ```{r, echo=FALSE,cache=TRUE, fig.height = 5, fig.width = 8, fig.align = "center"}
 for (year in 2016:2019) {
   temp<-read.csv(sprintf("ChartsData/VelocityMonthly%d.csv",year), row.names = 1)
-  assign(paste0("df",year), data.frame(Month=rownames(temp),Velocity = (as.vector(t(temp$Male)) +as.vector(t(temp$Female)))/2))
+  assign(paste0("df",year), data.frame(Month=rownames(temp),Velocity = apply(temp, 1,FUN = max) ))
 }
 df <- df2016 %>%  mutate(Year = '2016') %>%
        bind_rows(df2017 %>% mutate(Year = '2017')) %>%
@@ -168,7 +168,6 @@ df <- df2016 %>%  mutate(Year = '2016') %>%
 df$Month<- factor(df$Month, levels = month.abb)
 ggplot(df,aes(y = Velocity,x = Month,color = Year,group=Year)) + geom_line(size=2) +
   ggtitle("Dane miesieczne w latach 2016-2019")+labs(x="Month",y="Velocity [km/h]") 
-
 ```
 
 ## Bibliografia
